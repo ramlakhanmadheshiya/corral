@@ -10,10 +10,42 @@ var last_error: String = ""
 
 var _level_cache: Dictionary = {}
 var _daily_cache: Dictionary = {}
+## Today's Daily Board is built on a worker thread at start-up (the bot plays it
+## once to set the star scores), so opening it later doesn't stall.
+var _daily_task: int = -1
+var _daily_task_key: String = ""
+var _daily_result: Dictionary = {}
 
 
 func _ready() -> void:
 	_load_meta()
+	_warm_daily.call_deferred()
+
+
+func _warm_daily() -> void:
+	# Tests stay single-threaded; the web build has no threads.
+	if DisplayServer.get_name() == "headless" or OS.has_feature("web") or _daily_task >= 0:
+		return
+	# Fill the shared lookup tables here first, so the worker only reads them.
+	Field.new()
+	for id: String in Pieces.ids():
+		Pieces.cells(id)
+	_daily_task_key = today_key()
+	var key: String = _daily_task_key
+	_daily_task = WorkerThreadPool.add_task(func() -> void: _daily_result = DailyBoard.build(key), false, "Daily Board")
+
+
+func _finish_warm_daily() -> void:
+	if _daily_task < 0:
+		return
+	WorkerThreadPool.wait_for_task_completion(_daily_task)
+	_daily_task = -1
+	if not _daily_result.is_empty():
+		_daily_cache[_daily_task_key] = _daily_result
+
+
+func _exit_tree() -> void:
+	_finish_warm_daily()
 
 
 ## Drops cached content and reads it again (used by the error card's Retry).
@@ -143,6 +175,8 @@ static func today_key() -> String:
 
 ## The Daily Board for a date (built once, then cached).
 func daily(date_key: String) -> Dictionary:
+	if date_key == _daily_task_key:
+		_finish_warm_daily()
 	if not _daily_cache.has(date_key):
 		_daily_cache[date_key] = DailyBoard.build(date_key)
 	return _daily_cache[date_key]

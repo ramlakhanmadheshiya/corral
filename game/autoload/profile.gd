@@ -535,7 +535,8 @@ func check_achievements() -> Array[Dictionary]:
 # --- Settings and one-time flags ---------------------------------------------
 
 func setting(key: String, fallback: Variant = null) -> Variant:
-	return _d["settings"].get(key, fallback)
+	var st: Variant = _d.get("settings", {})
+	return (st as Dictionary).get(key, fallback) if st is Dictionary else fallback
 
 
 func set_setting(key: String, value: Variant) -> void:
