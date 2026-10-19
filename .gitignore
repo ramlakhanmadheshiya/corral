@@ -1,0 +1,11 @@
+.godot/
+.DS_Store
+*.tmp
+build/
+site/
+/android/
+__pycache__/
+plugins_src/corral_share/build/
+plugins_src/corral_share/.gradle/
+addons/corral_share/bin/
+.venv/

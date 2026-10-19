@@ -1,0 +1,30 @@
+{
+  "levels_per_chapter": 15,
+  "unlock_clears": 10,
+  "chapters": [
+    {"id": "meadow", "name": "Meadow", "tagline": "Build your first pens", "accent": "#5DBB8A",
+     "goals": ["captures", "captures", "pen", "captures", "pen", "score", "captures", "pen", "score", "pen", "captures", "score", "pen", "score", "pen"],
+     "rocks": [0, 0], "gems": [0, 0], "fragments": [1, 3], "hop": false, "difficulty": [0.0, 0.25], "moves": [2, 8]},
+    {"id": "orchard", "name": "Orchard", "tagline": "A gem doubles its pen", "accent": "#F28C6B",
+     "goals": ["gems", "gems", "captures", "gems", "pen", "gems", "score", "gems", "pen", "gems", "score", "gems", "pen", "score", "gems"],
+     "rocks": [0, 1], "gems": [2, 4], "fragments": [1, 3], "hop": false, "difficulty": [0.1, 0.35], "moves": [3, 10]},
+    {"id": "quarry", "name": "Quarry", "tagline": "Rocks never move, and never vanish", "accent": "#8E8BD6",
+     "goals": ["captures", "pen", "score", "gems", "pen", "captures", "score", "pen", "gems", "score", "pen", "captures", "score", "pen", "score"],
+     "rocks": [3, 7], "gems": [1, 3], "fragments": [1, 2], "hop": false, "difficulty": [0.2, 0.45], "moves": [4, 11]},
+    {"id": "lagoon", "name": "Lagoon", "tagline": "Bigger pens, far bigger scores", "accent": "#4FA9D9",
+     "goals": ["pen", "score", "pen", "pen", "score", "gems", "pen", "score", "pen", "score", "pen", "gems", "score", "pen", "score"],
+     "rocks": [1, 4], "gems": [1, 3], "fragments": [0, 2], "hop": false, "difficulty": [0.25, 0.5], "moves": [5, 13]},
+    {"id": "canyon", "name": "Canyon", "tagline": "Close two pens with one piece", "accent": "#E0A43C",
+     "goals": ["combo", "captures", "combo", "pen", "combo", "score", "combo", "gems", "combo", "score", "combo", "pen", "combo", "score", "combo"],
+     "rocks": [1, 4], "gems": [1, 3], "fragments": [0, 2], "hop": false, "difficulty": [0.3, 0.55], "moves": [3, 13]},
+    {"id": "marsh", "name": "Marsh", "tagline": "Gems that hop between turns", "accent": "#56B8A8",
+     "goals": ["gems", "gems", "score", "gems", "pen", "gems", "captures", "gems", "score", "gems", "pen", "gems", "score", "gems", "gems"],
+     "rocks": [1, 4], "gems": [2, 4], "fragments": [0, 2], "hop": true, "difficulty": [0.35, 0.6], "moves": [4, 14]},
+    {"id": "tundra", "name": "Tundra", "tagline": "Awkward pieces, few to spare", "accent": "#7C9CC9",
+     "goals": ["score", "pen", "score", "captures", "score", "pen", "score", "gems", "score", "pen", "score", "combo", "score", "pen", "score"],
+     "rocks": [2, 5], "gems": [1, 3], "fragments": [0, 2], "hop": false, "difficulty": [0.55, 0.85], "moves": [5, 15]},
+    {"id": "summit", "name": "Summit", "tagline": "Everything at once", "accent": "#D9709C",
+     "goals": ["pen", "gems", "combo", "score", "captures", "pen", "gems", "score", "combo", "pen", "gems", "score", "pen", "combo", "score"],
+     "rocks": [2, 6], "gems": [2, 4], "fragments": [0, 2], "hop": true, "difficulty": [0.6, 0.95], "moves": [6, 16]}
+  ]
+}
