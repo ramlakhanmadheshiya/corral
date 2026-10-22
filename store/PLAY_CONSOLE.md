@@ -104,14 +104,14 @@ Re-render the art any time: `godot --path . res://tests/capture.tscn -- /tmp/cor
 
 ## In-app products (Monetize with Play > Products, after the first AAB is on a track)
 
-124 products, prices in rupees (Play converts the rest):
+214 products, prices in rupees (Play converts the rest, and players see their own currency):
 
 | Kind | IDs | Price |
 |---|---|---|
 | One-time packs | `complete_pack`, `supporter_pack`, `theme_pack`, `style_pack` | ₹449, ₹249, ₹149, ₹149 |
 | Coin bags (consumed in the app) | `coins_100` … `coins_6000` (10 bags) | ₹29 … ₹449 |
 | Level keys (consumed in the app) | `keys_1` … `keys_10` | ₹30 each, 10% off for 5 or more |
-| Tips (consumed in the app) | `tip_10` … `tip_1000` in steps of 10 | the amount in the ID |
+| Tips (consumed in the app) | `tip_10` … `tip_1000` in steps of 10, then `tip_1100` … `tip_10000` in steps of 100 (190 products) | the amount in the ID |
 
 Full list: `python3 store/play_products.py list` (also `store/products.csv`).
 Create them all at once with the service account: `python3 -m pip install google-auth requests` then `python3 store/play_products.py create path/to/key.json`. It skips any that already exist.

@@ -29,7 +29,9 @@ Made with Godot 4.7.2 (GDScript, Compatibility renderer, so it also runs on the 
   | Pen styles | 6 looks for walls and pen colours: Candy, Stone, Neon, Fence, Glass, Ink (1-hour trial from a video) |
   | Coin bags | 100 to 6,000 coins; plus free coins from a video (5 a day) |
   | Level keys | 1–10 keys, 10% off for 5+; plus a free key from a video (3 a day) |
-  | Tip jar | Say thanks; unlocks nothing |
+  | Tip jar | Say thanks; unlocks nothing. Four quick amounts, or pick your own with − / + (one amount at a time) and a slider from the smallest tip to the largest. 190 products: ₹10 to ₹1,000 in steps of ₹10, then ₹1,100 to ₹10,000 in steps of ₹100 (`tip_10` … `tip_10000`, priced in rupees in Play Console) |
+
+  **Prices are always in the player's own currency:** every price on screen comes from `Store.price(id)`, which is Google Play's localised price once the product query answers (rupees in India, US dollars in the USA, Canadian dollars in Canada…) and until then a fallback guessed from the device locale (only India's shows ₹). The tip jar never asks for a rupee amount; it shows the local price of the selected tip, and refreshes when Play's prices arrive. The shop, every buy card and the tip jar carry a small line: "Purchases are made through Google Play. Sorry, we can't refund or undo a purchase." (also on the help page and at the end of the store listing).
 
   Product ids and Play Console setup: [`store/PLAY_PRODUCTS.md`](store/PLAY_PRODUCTS.md). Debug desktop builds simulate purchases; the web build explains that purchases are in the Android app.
 - **Ads (Android):** a banner at the bottom of every screen, with its space reserved before the ad loads so the layout never jumps; it loads a fresh ad when the player changes screens (at most every 30 s, per AdMob policy). Rewarded videos only when the player asks (the continue, a hint or shuffle when out of coins, free coins, a level key, a pack trial). A short video plays after every 5th finished game (Classic run, Daily Board or cleared challenge), never during one. Supporters see no banners and no videos between games. The web build shows no ads.

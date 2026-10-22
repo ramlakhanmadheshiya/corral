@@ -43,6 +43,8 @@ PLAYER-FRIENDLY
 
 Made with Godot by Ramlakhan Madheshiya. Questions or ideas: support@theramlakhan.com
 
+Purchases are made through Google Play and can't be refunded or undone.
+
 ## Category and tags
 
 - Category: Games > Puzzle

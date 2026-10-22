@@ -36,7 +36,13 @@ KEY_PRICE = 30          # per key
 KEY_BULK = 5            # buying this many or more ...
 KEY_DISCOUNT = 0.10     # ... takes 10% off
 KEY_MAX = 10
-TIP_MIN, TIP_MAX, TIP_STEP = 10, 1000, 10
+TIP_MIN, TIP_MAX, TIP_STEP = 10, 10000, 10
+TIP_BIG_FROM, TIP_BIG_STEP = 1000, 100   # above ₹1,000, tips go up in steps of ₹100
+
+
+def tip_amounts():
+    """Every tip amount in rupees: 10-1,000 in 10s, then 1,100-10,000 in 100s (190)."""
+    return list(range(TIP_MIN, TIP_BIG_FROM + 1, TIP_STEP)) + list(range(TIP_BIG_FROM + TIP_BIG_STEP, TIP_MAX + 1, TIP_BIG_STEP))
 
 
 def products():
@@ -54,10 +60,10 @@ def products():
             "price": round(price),
             "kind": "consumable",
         })
-    for r in range(TIP_MIN, TIP_MAX + 1, TIP_STEP):
+    for r in tip_amounts():
         out.append({
             "id": f"tip_{r}",
-            "title": f"Tip ₹{r}",
+            "title": "Tip jar",  # no currency: Play shows the title to buyers everywhere
             "description": "A thank-you to the developer. Opens nothing new.",
             "price": r,
             "kind": "consumable",

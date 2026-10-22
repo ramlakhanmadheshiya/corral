@@ -78,6 +78,13 @@ static func para(text: String, size: int = Style.SIZE_SMALL, color: Color = Styl
 
 
 ## Small spaced capitals, e.g. "CHAPTER 2".
+## The small "no refunds" line for the shop, buy cards and the tip jar.
+static func refund_note() -> Label:
+	var l: Label = para(Store.REFUND_NOTE, Style.SIZE_CAPTION, Style.MUTED)
+	l.name = "RefundNote"
+	return l
+
+
 static func caption(text: String, color: Color = Style.MUTED, size: int = Style.SIZE_CAPTION, align: HorizontalAlignment = HORIZONTAL_ALIGNMENT_CENTER) -> Label:
 	var l: Label = label(text.to_upper(), size, color, 600, align)
 	var fv: FontVariation = (font(600) as FontVariation).duplicate()
@@ -349,17 +356,7 @@ static func slider_row(text: String, icon_name: String, value: float, on_change:
 	s.step = 0.05
 	s.value = value
 	s.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	s.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	s.custom_minimum_size = Vector2(0, 48)
-	s.focus_mode = Control.FOCUS_ALL
-	var track: StyleBoxFlat = box(Color(Style.INK, 0.14), 6, Color.TRANSPARENT, 0, Vector2(0, 6))
-	var fill: StyleBoxFlat = box(accent, 6, Color.TRANSPARENT, 0, Vector2(0, 6))
-	s.add_theme_stylebox_override("slider", track)
-	s.add_theme_stylebox_override("grabber_area", fill)
-	s.add_theme_stylebox_override("grabber_area_highlight", fill)
-	s.add_theme_icon_override("grabber", _knob(false, accent))
-	s.add_theme_icon_override("grabber_highlight", _knob(true, accent))
-	s.add_theme_icon_override("grabber_disabled", _knob(false, accent))
+	style_slider(s, accent)
 	var pct: Label = label("%d%%" % int(round(value * 100)), Style.SIZE_SMALL, Style.MUTED, 600, HORIZONTAL_ALIGNMENT_RIGHT)
 	pct.custom_minimum_size = Vector2(70, 0)
 	s.value_changed.connect(func(v: float) -> void:
@@ -370,6 +367,21 @@ static func slider_row(text: String, icon_name: String, value: float, on_change:
 	row.add_child(s)
 	row.add_child(pct)
 	return row
+
+
+## The app's slider look: a soft track, an accent fill and a round knob.
+static func style_slider(s: HSlider, accent: Color = Style.AMBER) -> void:
+	s.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	s.custom_minimum_size.y = 48
+	s.focus_mode = Control.FOCUS_ALL
+	var track: StyleBoxFlat = box(Color(Style.INK, 0.14), 6, Color.TRANSPARENT, 0, Vector2(0, 6))
+	var fill: StyleBoxFlat = box(accent, 6, Color.TRANSPARENT, 0, Vector2(0, 6))
+	s.add_theme_stylebox_override("slider", track)
+	s.add_theme_stylebox_override("grabber_area", fill)
+	s.add_theme_stylebox_override("grabber_area_highlight", fill)
+	s.add_theme_icon_override("grabber", _knob(false, accent))
+	s.add_theme_icon_override("grabber_highlight", _knob(true, accent))
+	s.add_theme_icon_override("grabber_disabled", _knob(false, accent))
 
 
 static var _knobs: Dictionary = {}

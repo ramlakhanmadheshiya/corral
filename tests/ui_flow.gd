@@ -376,6 +376,8 @@ func _shop() -> void:
 	app.go("shop")
 	await _wait(0.8)
 	t.eq(app.screen_name, "shop", "the shop opens")
+	_refund_note(app.screen, "the shop")
+	await _tip_jar()
 	var c0: int = Profile.coins()
 	_press(app.screen, "Product_coins")
 	await _wait(0.4)
@@ -397,11 +399,60 @@ func _shop() -> void:
 	await _wait(0.8)
 	_press(app.screen, "Product_supporter_pack")
 	await _wait(0.4)
+	_refund_note(app.top_overlay(), "the product card")
 	_press(app.top_overlay(), "Buy")
 	await _wait(0.4)
 	t.ok(Profile.is_supporter(), "the Supporter pack is bought (simulated)")
 	t.eq(AdManager.banner_height, 0.0, "Supporters see no banner")
 	app.close_overlays()
+
+
+func _refund_note(root: Node, where: String) -> void:
+	var note: Label = _find(root, "RefundNote") as Label
+	t.ok(note != null and note.text == Store.REFUND_NOTE, "the no-refunds line is on %s" % where)
+	t.ok(note != null and note.text.contains("Sorry, we can't refund or undo a purchase."), "with the exact wording on %s" % where)
+
+
+## The tip jar: presets and the picker show local prices, − / + step one amount,
+## the slider runs the whole range, and the big button tips the selection.
+func _tip_jar() -> void:
+	_press(app.screen, "TipJar")
+	await _wait(0.4)
+	var card: Overlay = app.top_overlay()
+	t.ok(card is TipCard, "the tip jar opens")
+	_refund_note(card, "the tip card")
+	t.ok(_find(card, "TipAmount") == null, "no typed rupee amount")
+	var price: Label = _find(card, "TipPrice") as Label
+	var slider: HSlider = _find(card, "TipSlider") as HSlider
+	var custom: Button = _find(card, "TipCustom") as Button
+	t.ok(price != null and slider != null and custom != null, "price, slider and tip button")
+	t.eq((card as TipCard).selected(), Store.TIP_DEFAULT, "₹500's tip is picked first")
+	t.eq(price.text, Store.price("tip_500"), "the picker shows the local price")
+	t.eq(custom.text, "Tip " + Store.price("tip_500"), "the big button shows it too")
+	t.eq((_find(card, "Tip_20") as Button).text, Store.price("tip_20"), "presets show local prices")
+	t.eq(int(slider.max_value), Store.tip_amounts().size() - 1, "the slider covers every amount")
+	_press(card, "TipPlus")
+	t.eq((card as TipCard).selected(), 510, "plus steps one amount")
+	_press(card, "TipMinus")
+	_press(card, "TipMinus")
+	t.eq((card as TipCard).selected(), 490, "minus steps one amount")
+	slider.value = slider.max_value
+	t.eq((card as TipCard).selected(), Store.TIP_MAX, "the slider reaches the largest tip")
+	t.eq(price.text, Store.price("tip_%d" % Store.TIP_MAX), "and the label follows")
+	_press(card, "TipPlus")
+	t.eq((card as TipCard).selected(), Store.TIP_MAX, "plus stops at the largest")
+	slider.value = 0
+	t.eq((card as TipCard).selected(), Store.TIP_MIN, "the slider reaches the smallest tip")
+	Store.prices["tip_10"] = "US$9.99"
+	Store.price_updated.emit("tip_10", "US$9.99")
+	t.eq(price.text, "US$9.99", "Play's price replaces the fallback live")
+	Store.prices["tip_10"] = Store.tip_price(10)
+	var n: int = Profile.tips_given()
+	_press(card, "TipCustom")
+	await _wait(0.3)
+	t.eq(Profile.tips_given(), n + 1, "the tip button tips (simulated)")
+	card.close()
+	await _wait(0.3)
 
 
 func _settings() -> void:

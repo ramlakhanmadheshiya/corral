@@ -221,6 +221,27 @@ func _purchases() -> void:
 	t.ok(Store.complete_saving() > 0, "the Complete pack is a saving")
 	for id: String in Store.all_ids():
 		t.ok(not Store.price(id).is_empty(), "%s has a price" % id)
+	# Tips: ₹10-₹1,000 in 10s, then ₹1,100-₹10,000 in 100s, every one queried from Play.
+	var amounts: Array = Store.tip_amounts()
+	t.eq(amounts.size(), 190, "190 tip amounts")
+	t.eq(int(amounts[0]), 10, "the smallest tip is 10")
+	t.eq(int(amounts[-1]), 10000, "the largest tip is 10,000")
+	t.ok(amounts.has(1000) and amounts.has(1100) and not amounts.has(1010) and not amounts.has(1050), "steps of 100 above 1,000")
+	t.eq(Store.tip_ids().size(), 190, "a product per tip amount")
+	var all: Array = Store.all_ids()
+	var missing: int = 0
+	for id: String in Store.tip_ids():
+		if not all.has(id) or not Store.prices.has(id):
+			missing += 1
+	t.eq(missing, 0, "every tip is queried from Play and has a fallback price")
+	t.eq(Store.snap_tip(3), 10, "snap: below the minimum")
+	t.eq(Store.snap_tip(504), 500, "snap: to the nearest 10")
+	t.eq(Store.snap_tip(1240), 1200, "snap: to the nearest 100 above 1,000")
+	t.eq(Store.snap_tip(99999), 10000, "snap: above the maximum")
+	t.eq(Store.nudge_tip(1000, 1), 1100, "nudge up from 1,000 goes to 1,100")
+	t.eq(Store.nudge_tip(1100, -1), 1000, "nudge down from 1,100 goes to 1,000")
+	t.eq(Store.nudge_tip(10, -1), 10, "nudge stops at the minimum")
+	t.eq(Store.nudge_tip(10000, 1), 10000, "nudge stops at the maximum")
 
 
 func _runs_and_restart() -> void:
